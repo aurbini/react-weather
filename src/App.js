@@ -2,9 +2,8 @@ import React from "react"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Home from "./pages/Home";
 import Hourly from "./pages/Hourly"; 
-import { WeatherProvider } from "./utils/GlobalState";
+import { WeatherProvider } from "./store/globalState";
 import Nav from "./components/Navbar/Nav"; 
-import './App.css';
 
 
 function App(){

@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
-import { useWeatherContext } from "../../utils/GlobalState";
+import { useWeatherContext } from "../../store/globalState";
 import "./CityList.css";
 
 const CityList = () => {
-  const [state, dispatch] = useWeatherContext();
+  const [ state ] = useWeatherContext();
 
   useEffect(()=>{
     console.log(state.currentSearch)
-  },[])
-
-
+  },[state.currentSearch])
 
   return ( 
     <ul>

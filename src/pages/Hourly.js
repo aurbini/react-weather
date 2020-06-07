@@ -1,14 +1,11 @@
 import React, {useEffect} from 'react';
-import { useWeatherContext } from "../utils/GlobalState";
+import { useWeatherContext } from "../store/globalState";
 import axios from "axios"; 
 import {Line} from 'react-chartjs-2';
 import hourlyWeather from "../utils/hoursObj";
-import Moment from "react-moment";
-import { max } from 'moment';
 
 
 const Hourly = ()=>{
-
   const [state, dispatch ] = useWeatherContext(); 
 
   var apiKey = '8510c14918232716bc9743d7f1fc2f0c'; 

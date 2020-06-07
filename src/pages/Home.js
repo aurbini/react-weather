@@ -2,72 +2,66 @@ import React, {useEffect } from 'react';
 import SearchForm from "../components/SearchForm/SearchForm";
 import CityList from "../components/CityList/CityList";
 import MainWeather from "../components/MainWeather/MainWeather.js";
-import { useWeatherContext } from "../utils/GlobalState";
-import axios from "axios"; 
+import { useWeatherContext } from "../store/globalState";
 import CardCountainer from "../components/CardContainer/CardContainer"; 
+import API from '../utils/API'
 
 function Home() {
 
-  var apiKey = '8510c14918232716bc9743d7f1fc2f0c'; 
   const [ state, dispatch ] = useWeatherContext();
   const currentWeather = {}; 
 
-
-
   useEffect(()=>{
-    console.log('rerenderap')
-    const search = state.currentSearch;
-    console.log(search); 
-    axios({
-      method: 'GET',
-      url:`https://api.openweathermap.org/data/2.5/weather?q=${search}&APPID=` + apiKey+'&units=imperial'
-      }).then(response =>{
-        console.log(response.data.weather[0].icon); 
-        currentWeather["city"] = response.data.name; 
-        currentWeather["temp"] = response.data.main.temp;
-        currentWeather["windSpeed"] = response.data.wind.speed;
-        currentWeather["humidity"] = response.data.main.humidity;
-        currentWeather["icon"] = response.data.weather[0].icon;
-        currentWeather["location"] = {
-          lat: response.data.coord.lat, 
-          lon: response.data.coord.lon
-        }
-        const lat = response.data.coord.lat; 
-        const lon = response.data.coord.lon; 
-        console.log(lat, lon);
-        axios({
-          url: `https://api.openweathermap.org/data/2.5/uvi/forecast?appid=${apiKey}&lat=${lat}&lon=${lon}`,
-          method: "GET"
-        }).then(function(response){
-          currentWeather["uvIndex"] = response.data[0].value;
-          sessionStorage.setItem("lat", `${lat}`);
-          sessionStorage.setItem("lon", `${lon}`);
-
-          fiveDayWeather(currentWeather.location.lon, currentWeather.location.lat); 
-        })
-      })
-      // uvIndex(response.coord.lon,response.coord.lat); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const currentSearch = state.currentSearch
+    loadWeather(currentSearch)
+   
   },[state.currentSearch])
     
-
-  const fiveDayWeather = (lon, lat, icon) => {
-    axios({
-      url: `https://api.openweathermap.org/data/2.5/forecast?appid=${apiKey}&lat=${lat}&lon=${lon}&units=imperial`,
-      method: "GET"
-    }).then(function(response){
-      var hours = response.data.list;
-      const daysOfWeek = [];
-      for(let i = 0; i < hours.length;i+=8){
-        let day = hours[i];
-        daysOfWeek.push(day);
-      }
-      currentWeather["daysOfWeek"] = daysOfWeek;
-      dispatch({
-      type: "CURRENTWEATHER",
-      payload: currentWeather
+  const loadWeather = (currentSearch) => {
+    API.getCurrentWeather(currentSearch)
+      .then(res => {
+        console.log(res)
+        currentWeather["city"] = res.name; 
+        currentWeather["temp"] = res.main.temp;
+        currentWeather["windSpeed"] = res.wind.speed;
+        currentWeather["humidity"] = res.main.humidity;
+        currentWeather["icon"] = res.weather[0].icon;
+        currentWeather["location"] = {
+          lat: res.coord.lat, 
+          lon: res.coord.lon
+        }
+        const lat = res.coord.lat; 
+        const lon = res.coord.lon;
+        loadUV(lat, lon)
       })
-    })
+  }
+
+  const loadUV = (lat, lon) => {
+    API.getUV(lat, lon)
+      .then(res => {
+        currentWeather["uvIndex"] = res[0].value;
+        sessionStorage.setItem("lat", `${lat}`);
+        sessionStorage.setItem("lon", `${lon}`);
+        loadFiveDay(lat, lon)
+      })
+  }
+
+  const loadFiveDay = (lat, lon) => {
+    API.getFiveDay(lat, lon)
+      .then(res => {
+        var hours = res.list;
+        const daysOfWeek = [];
+        for(let i = 0; i < hours.length;i+=8){
+          let day = hours[i];
+          daysOfWeek.push(day);
+        }
+        currentWeather["daysOfWeek"] = daysOfWeek;
+        console.log(currentWeather)
+        dispatch({
+        type: "CURRENT_WEATHER",
+        payload: currentWeather
+        })
+      })
   }
 
   return (

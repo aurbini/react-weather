@@ -1,20 +1,16 @@
-import React, { useRef, useState } from 'react';
-import { useWeatherContext } from "../../utils/GlobalState";
+import React, { useState } from 'react';
+import { useWeatherContext } from "../../store/globalState";
 
 
 
 const SearchForm = () => {
-
-
-
-  const [state, dispatch] = useWeatherContext();
+  const [ state, dispatch ] = useWeatherContext();
   const [ searchInput, setSearchInput ] = useState();
-  
 
   function onSearchSubmit(event){
     event.preventDefault();
     dispatch({
-      type: "ADDCITY",
+      type: "ADD_CITY",
       payload: searchInput
     })
 

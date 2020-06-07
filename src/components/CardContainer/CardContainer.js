@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import { useWeatherContext } from "../../utils/GlobalState";
+import React from 'react';
+import { useWeatherContext } from "../../store/globalState";
 import Card from "../Card/Card";
 
 
 const CardContainer = () => {
 
-  const [ state, dispatch ] = useWeatherContext();
+  const [ state ] = useWeatherContext();
   const someDate = new Date();
   var numberOfDaysToAdd = 1;
 
@@ -23,7 +23,7 @@ const CardContainer = () => {
 
   return ( 
     <div className="weather-cards row">
-      {state.daysOfWeek.length != 0 ? renderCards(): ""}
+      {state.daysOfWeek.length !== 0 ? renderCards() : ""}
     </div>
    );
 }
