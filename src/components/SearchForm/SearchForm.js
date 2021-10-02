@@ -13,7 +13,7 @@ const SearchForm = () => {
       type: "ADD_CITY",
       payload: searchInput
     })
-
+    setSearchInput('')
   }
 
   const handleSearchChange = (e) =>{

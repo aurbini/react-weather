@@ -4,11 +4,14 @@ import Home from "./pages/Home";
 import Hourly from "./pages/Hourly"; 
 import { WeatherProvider } from "./store/globalState";
 import Nav from "./components/Navbar/Nav"; 
-
+import { useContext } from "react";
+import { AuthContext } from "./store/authContext"
+import Auth from './components/Auth/Auth'
 
 function App(){
-  return (
-    <BrowserRouter>
+  const { isAuth, login } = useContext(AuthContext);
+  let content = <Auth />
+  if(isAuth) content = <BrowserRouter>
       <div>
         <WeatherProvider> 
           <Nav />
@@ -25,9 +28,7 @@ function App(){
         </WeatherProvider>
       </div>
     </BrowserRouter>
-  )
-
-
+  return content
 }
 
 export default App; 
