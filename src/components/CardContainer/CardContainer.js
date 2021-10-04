@@ -13,7 +13,7 @@ const CardContainer = () => {
   const renderCards = () =>{
     return state.daysOfWeek.map((day)=>{
       return (
-        <div className="col-md-12 col-lg-2">
+        <div key={Math.random()}className="col-md-12 col-lg-2">
           <div className="card bg-primary mb-2 card-content">
             <Card temp={day.main.temp} date={someDate.setDate(someDate.getDate() + numberOfDaysToAdd)} humidity={day.main.humidity} icon={day.weather[0].icon}/>
           </div>

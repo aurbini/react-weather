@@ -10,11 +10,9 @@ const AuthProvider = props => {
   const [ authenticated, setIsAuthenticated ] = useState(false)
 
   function loginHandler() {
-    console.log('login handler')
     setIsAuthenticated(true)
   }
   function logoutHandler() {
-    console.log('logout handler')
     setIsAuthenticated(false)
   }
   return <AuthContext.Provider

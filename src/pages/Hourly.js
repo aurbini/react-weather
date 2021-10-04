@@ -18,7 +18,6 @@ const Hourly = ()=>{
       url: `https://api.openweathermap.org/data/2.5/forecast/?appid=${apiKey}&lat=${lat}&lon=${lon}&units=imperial`,
       method: "GET"
     }).then(function(response){
-      console.log(response); 
       var hours = response.data.list;
       let addTime = 3;
       for(let i = 1; i < 11;i++){
@@ -43,12 +42,6 @@ const Hourly = ()=>{
       })
     })
   }, [])
-
-  useEffect(()=>{
-    console.log(state); 
-  }, [])
-
-
 
   const label = {
     labels: [ state.hourlyWeather.hour1.hour, 

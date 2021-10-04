@@ -26,7 +26,8 @@ const WeatherProvider = ({ value = [], ...props }) => {
     lowAndHigh: {
       low: "", 
       high:""
-    }
+    },
+    loading: false
   })
   return <Provider value={[state, dispatch]} {...props} />;
 }

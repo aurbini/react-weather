@@ -9,10 +9,10 @@ const Card = (props) => {
   var weatherLink = `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
   return ( 
-    <div class="card-body text-center">
+    <div className="card-body text-center">
       <Moment format='MMMM Do YYYY'>{date}</Moment>
-        <p class="card-stat text-light">{temp}</p>
-        <p class="card-stat">%{humidity}</p>
+        <p className="card-stat text-light">{temp}</p>
+        <p className="card-stat">%{humidity}</p>
         <img src={weatherLink} alt="" />
     </div>
    );

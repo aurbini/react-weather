@@ -6,7 +6,6 @@ const CityList = () => {
   const [ state ] = useWeatherContext();
 
   useEffect(()=>{
-    console.log(state.currentSearch)
   },[state.currentSearch])
 
   return ( 

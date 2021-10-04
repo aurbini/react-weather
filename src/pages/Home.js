@@ -1,38 +1,46 @@
-import React, {useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import SearchForm from "../components/SearchForm/SearchForm";
 import CityList from "../components/CityList/CityList";
 import MainWeather from "../components/MainWeather/MainWeather.js";
 import { useWeatherContext } from "../store/globalState";
-import CardCountainer from "../components/CardContainer/CardContainer"; 
+// import { HttpContext } from '../store/httpState';
+import CardCountainer from "../components/CardContainer/CardContainer";
 import API from '../utils/API'
+import { errorRequest } from '../store/actions/actions';
 
 function Home() {
 
-  const [ state, dispatch ] = useWeatherContext();
-  const currentWeather = {}; 
+  const [state, dispatch] = useWeatherContext();
+  const currentWeather = {};
+  // const httpContext = useContext(HttpContext)
+  // const [httpState, httpDispatch] = httpContext
 
-  useEffect(()=>{
+  useEffect(() => {
     const currentSearch = state.currentSearch
     loadWeather(currentSearch)
-   
-  },[state.currentSearch])
-    
+
+  }, [state.currentSearch])
+
   const loadWeather = (currentSearch) => {
+    // httpDispatch({ type: "SENDING"})
     API.getCurrentWeather(currentSearch)
       .then(res => {
-        console.log(res)
-        currentWeather["city"] = res.name; 
+        // httpDispatch({ type: "RESPONSE" })
+        currentWeather["city"] = res.name;
         currentWeather["temp"] = res.main.temp;
         currentWeather["windSpeed"] = res.wind.speed;
         currentWeather["humidity"] = res.main.humidity;
         currentWeather["icon"] = res.weather[0].icon;
         currentWeather["location"] = {
-          lat: res.coord.lat, 
+          lat: res.coord.lat,
           lon: res.coord.lon
         }
-        const lat = res.coord.lat; 
+        const lat = res.coord.lat;
         const lon = res.coord.lon;
         loadUV(lat, lon)
+      })
+      .catch(err => {
+        // httpDispatch({ type: "ERROR", errorMessage: err })
       })
   }
 
@@ -51,15 +59,14 @@ function Home() {
       .then(res => {
         var hours = res.list;
         const daysOfWeek = [];
-        for(let i = 0; i < hours.length;i+=8){
+        for (let i = 0; i < hours.length; i += 8) {
           let day = hours[i];
           daysOfWeek.push(day);
         }
         currentWeather["daysOfWeek"] = daysOfWeek;
-        console.log(currentWeather)
         dispatch({
-        type: "CURRENT_WEATHER",
-        payload: currentWeather
+          type: "CURRENT_WEATHER",
+          payload: currentWeather
         })
       })
   }
@@ -68,20 +75,22 @@ function Home() {
     <div>
       <div className="container-fluid">
         <div className="row">
-          <aside class="col-lg-3 col-md-4 column aside-section">
+          <aside className="col-lg-3 col-md-4 column aside-section">
             <h2>Search City</h2>
-            <SearchForm /> 
+            <SearchForm />
             <CityList />
           </aside>
-          <div class="col-lg-9 col-md-7">
-            <MainWeather />
-            <h2>Five Day Forecast</h2> 
+          <div className="col-lg-9 col-md-7">
+            <MainWeather 
+              // loading={httpState.loading} 
+            />
+            <h2>Five Day Forecast</h2>
             <CardCountainer />
           </div>
         </div>
       </div>
     </div>
-    );
+  );
 }
 
 export default Home;
