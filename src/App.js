@@ -1,37 +1,26 @@
-import React from "react"
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import Home from "./pages/Home";
-import Hourly from "./pages/Hourly"; 
-import { WeatherProvider } from "./store/globalState";
-import Nav from "./components/Navbar/Nav"; 
-import { useContext } from "react";
-import { AuthContext } from "./store/authContext"
-import Auth from './components/Auth/Auth'
-import HttpProvider from './store/httpState'
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-function App(){
-  const { isAuth, login } = useContext(AuthContext);
-  let content = <Auth />
-  if(isAuth) content = <BrowserRouter>
-      <div>
-        {/* <HttpProvider> */}
-          <WeatherProvider> 
-            <Nav />
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-            </Switch>
-            <Switch>
-              <Route exact path="/hourly">
-                <Hourly />
-              </Route>
-            </Switch>
-          </WeatherProvider>
-        {/* </HttpProvider> */}
-      </div>
-    </BrowserRouter>
-  return content
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
 
-export default App; 
+export default App;
