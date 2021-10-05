@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useContext } from 'react';
 
 import httpReducer from './reducers/httpReducer';
 
-export const HttpContext = React.createContext()
+const HttpContext = React.createContext()
 const { Provider } = HttpContext
 
 const HttpProvider = props => {
@@ -14,4 +14,8 @@ const HttpProvider = props => {
   return <Provider value={[state, dispatch]} {...props} />
 }
 
-export default HttpProvider
+const useHttpContext = () => {
+  return useContext(HttpContext)
+}
+
+export { HttpProvider, useHttpContext } 

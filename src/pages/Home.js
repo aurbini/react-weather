@@ -1,20 +1,19 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import SearchForm from "../components/SearchForm/SearchForm";
 import CityList from "../components/CityList/CityList";
 import MainWeather from "../components/MainWeather/MainWeather.js";
 import { useWeatherContext } from "../store/globalState";
-// import { HttpContext } from '../store/httpState';
+import { useHttpContext } from '../store/httpState';
 import CardCountainer from "../components/CardContainer/CardContainer";
 import API from '../utils/API'
-import { errorRequest } from '../store/actions/actions';
 
 function Home() {
 
+  const [ httpState, httpDispatch ] = useHttpContext()
   const [state, dispatch] = useWeatherContext();
   const currentWeather = {};
-  // const httpContext = useContext(HttpContext)
-  // const [httpState, httpDispatch] = httpContext
 
+  console.log(httpState)
   useEffect(() => {
     const currentSearch = state.currentSearch
     loadWeather(currentSearch)
@@ -22,10 +21,10 @@ function Home() {
   }, [state.currentSearch])
 
   const loadWeather = (currentSearch) => {
-    // httpDispatch({ type: "SENDING"})
+    httpDispatch({ type: "SENDING"})
     API.getCurrentWeather(currentSearch)
       .then(res => {
-        // httpDispatch({ type: "RESPONSE" })
+        httpDispatch({ type: "RESPONSE" })
         currentWeather["city"] = res.name;
         currentWeather["temp"] = res.main.temp;
         currentWeather["windSpeed"] = res.wind.speed;
@@ -40,7 +39,7 @@ function Home() {
         loadUV(lat, lon)
       })
       .catch(err => {
-        // httpDispatch({ type: "ERROR", errorMessage: err })
+        httpDispatch({ type: "ERROR", errorMessage: "something went wrong" })
       })
   }
 
@@ -82,7 +81,8 @@ function Home() {
           </aside>
           <div className="col-lg-9 col-md-7">
             <MainWeather 
-              // loading={httpState.loading} 
+              loading={httpState.loading} 
+              error={httpState.error}
             />
             <h2>Five Day Forecast</h2>
             <CardCountainer />

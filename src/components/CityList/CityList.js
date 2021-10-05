@@ -13,7 +13,7 @@ const CityList = () => {
       {
         state.city.map(city =>{
           return (
-            <li>{ city }</li>
+            <li key={Math.random()}>{ city }</li>
           )
         })
       }
